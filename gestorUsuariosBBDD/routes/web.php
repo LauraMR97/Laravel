@@ -16,7 +16,7 @@ use App\Http\Controllers\miControlador;
 
 Route::get('/', [miControlador::class, 'irIndice']);
 Route::post('gestion', [miControlador::class, 'aniadirPersona']);
-Route::post('crear', [miControlador::class, 'ADD']);
+/*Route::post('crear', [miControlador::class, 'ADD']);
 Route::post('generar', [miControlador::class, 'Gestion']);
 Route::post('delAlumno', [miControlador::class, 'EliminarAlumno']);
-Route::post('delProfesor', [miControlador::class, 'EliminarProfesor']);
+Route::post('delProfesor', [miControlador::class, 'EliminarProfesor']);*/
