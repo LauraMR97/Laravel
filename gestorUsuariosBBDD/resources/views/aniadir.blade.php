@@ -19,11 +19,9 @@
         <input type="text" value="" name="Apellido"><br>
         <label>Edad</label>
         <input type="number" value="" name="Edad"><br><br>
-        <select name='rol'>
-            <option>Profesor </option>
-            <option>Alumno</option>
-            <option>Todo</option>
-        </select>
+        <input type="checkbox" name="tipousur[]" value="Profesor">Profesor
+        <input type="checkbox" name="tipousur[]" value="Alumno">Alumno
+        <input type="checkbox" name="tipousur[]" value="Conserje">Conserje<br>
         <input type="submit" value="ADD" name="ADD">
         <input type="submit" value="Volver" name="Volver">
     </form>

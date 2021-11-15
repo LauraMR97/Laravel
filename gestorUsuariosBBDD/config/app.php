@@ -230,7 +230,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Persona'=>App\Clases\Persona::class,
-        'Conexion'=>App\Clases\Conjunto::class
+        'Conexion'=>App\Clases\Conexion::class
 
     ],
 
