@@ -72,29 +72,46 @@ class miControlador extends Controller
         if ($val->get('Pertenece')) {
             $nombre = $val->get('Persona');
             $string = '';
+
             $persona = Conexion::buscarAlumnoPorNombre($nombre);
-            if ($persona != null) {
+
+            if (!$persona->isEmpty()) {
                 $string .= '[' . $nombre . ' Pertenece a Alumno]';
             }
 
             $persona = Conexion::buscarProfesorPorNombre($nombre);
-            if ($persona != null) {
+            if (!$persona->isEmpty()) {
                 $string .= '[' . $nombre . ' Pertenece a Profesor]';
             }
 
             $persona = Conexion::buscarConserjePorNombre($nombre);
-            if ($persona != null) {
+            if (!$persona->isEmpty()) {
                 $string .= '[' . $nombre . ' Pertenece a Conserje]';
             }
 
-            return view('indice', ['solucion' => 'hola']);
+            return view('indice', ['solucion' => $string]);
         }
 
         if ($val->get('Union')) {
+            $personas=Conexion::Union();
 
-            return view('aniadir');
+            return view('indice', ['solucion' => $personas]);
+        }
+
+        if ($val->get('Intersect')) {
+            $personas=Conexion::Intersect();
+            $solucion='';
+
+            for($i=0;$i<count($personas);$i++){
+                $solucion.='['.$personas[$i].'] ';
+            }
+
+            return view('indice', ['solucion' => $solucion]);
         }
     }
+
+
+
 
     public function Crear(Request $val){
         if ($val->get('addPersona')) {

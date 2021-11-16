@@ -34,8 +34,6 @@ class Conexion
 
     public static function verAlumnos()
     {
-        $personas = DB::table('personas')->get();
-        //$personas = DB::select('select * from personas');
 
         $personas = DB::table('personas')
             ->join('conjunto', 'conjunto.id_persona', '=', 'personas.ID')
@@ -49,8 +47,6 @@ class Conexion
 
     public static function verProfesores()
     {
-        $personas = DB::table('personas')->get();
-        //$personas = DB::select('select * from personas');
 
         $personas = DB::table('personas')
             ->join('conjunto', 'conjunto.id_persona', '=', 'personas.ID')
@@ -64,8 +60,6 @@ class Conexion
 
     public static function verConserjes()
     {
-        $personas = DB::table('personas')->get();
-        //$personas = DB::select('select * from personas');
 
         $personas = DB::table('personas')
             ->join('conjunto', 'conjunto.id_persona', '=', 'personas.ID')
@@ -79,73 +73,116 @@ class Conexion
 
     public static function cuantosAlumnos(){
         $numAlumnos=DB::table('conjunto')
-        ->select('count(id_persona)')
         ->where('id_rol',2)
-        ->get();
+        ->count();
 
         return $numAlumnos;
     }
     public static function cuantosProfesores(){
         $numProfesores=DB::table('conjunto')
-        ->select('count(id_persona)')
         ->where('id_rol',1)
-        ->get();
+        ->count();
 
         return $numProfesores;
     }
 
     public static function cuantosConserjes(){
         $numConserjes=DB::table('conjunto')
-        ->select('count(id_persona)')
         ->where('id_rol',3)
-        ->get();
+        ->count();
 
         return $numConserjes;
     }
 
 
     public static function buscarAlumnoPorNombre($nombre){
-        $personas = DB::table('personas')->get();
-        //$personas = DB::select('select * from personas');
 
         $personas = DB::table('personas')
-            ->join('conjunto', 'conjunto.id_persona', '=', 'personas.ID')
-            ->join('rol', 'rol.id_rol', '=', 'conjunto.id_rol')
-            ->select('personas.nombre')
-            ->where('rol', 'Alumno')
-            ->where('nombre', "'".$nombre."'")
-            ->get();
+        ->join('conjunto', 'conjunto.id_persona', '=', 'personas.ID')
+        ->join('rol', 'rol.id_rol', '=', 'conjunto.id_rol')
+        ->select('personas.nombre')
+        ->where('rol', 'Alumno')
+        ->where('personas.nombre',$nombre)
+        ->get();
 
         return $personas;
     }
 
     public static function buscarProfesorPorNombre($nombre){
-        $personas = DB::table('personas')->get();
-        //$personas = DB::select('select * from personas');
 
         $personas = DB::table('personas')
-            ->join('conjunto', 'conjunto.id_persona', '=', 'personas.ID')
-            ->join('rol', 'rol.id_rol', '=', 'conjunto.id_rol')
-            ->select('personas.nombre')
-            ->where('rol', 'Profesor')
-            ->where('nombre', "'".$nombre."'")
-            ->get();
+        ->join('conjunto', 'conjunto.id_persona', '=', 'personas.ID')
+        ->join('rol', 'rol.id_rol', '=', 'conjunto.id_rol')
+        ->select('personas.nombre')
+        ->where('rol', 'Profesor')
+        ->where('personas.nombre',$nombre)
+        ->get();
 
         return $personas;
     }
 
     public static function buscarConserjePorNombre($nombre){
-        $personas = DB::table('personas')->get();
-        //$personas = DB::select('select * from personas');
-
         $personas = DB::table('personas')
-            ->join('conjunto', 'conjunto.id_persona', '=', 'personas.ID')
-            ->join('rol', 'rol.id_rol', '=', 'conjunto.id_rol')
-            ->select('personas.nombre')
-            ->where('rol', 'Conserje')
-            ->where('nombre', "'".$nombre."'")
-            ->get();
+        ->join('conjunto', 'conjunto.id_persona', '=', 'personas.ID')
+        ->join('rol', 'rol.id_rol', '=', 'conjunto.id_rol')
+        ->select('personas.nombre')
+        ->where('rol', 'Conserje')
+        ->where('personas.nombre',$nombre)
+        ->get();
 
         return $personas;
+    }
+
+    public static function Union(){
+
+     $profesores = DB::table('personas')
+     ->join('conjunto', 'conjunto.id_persona', '=', 'personas.ID')
+     ->join('rol', 'rol.id_rol', '=', 'conjunto.id_rol')
+     ->select('personas.nombre', 'apellido', 'edad')
+     ->where('rol', 'Profesor');
+
+       $alumnos = DB::table('personas')
+       ->join('conjunto', 'conjunto.id_persona', '=', 'personas.ID')
+       ->join('rol', 'rol.id_rol', '=', 'conjunto.id_rol')
+       ->select('personas.nombre', 'apellido', 'edad')
+       ->where('rol', 'Alumno');
+
+
+       $conserjes = DB::table('personas')
+       ->join('conjunto', 'conjunto.id_persona', '=', 'personas.ID')
+       ->join('rol', 'rol.id_rol', '=', 'conjunto.id_rol')
+       ->select('personas.nombre', 'apellido', 'edad')
+       ->where('rol', 'Conserje')
+       ->union($profesores)
+       ->union($alumnos)
+       ->get();
+
+        return $conserjes;
+    }
+
+
+    public static function Intersect(){
+
+        $profesores = Conexion::verProfesores()->toArray();
+        $alumnos= Conexion::verAlumnos()->toArray();
+        $conserjes=Conexion::verConserjes()->toArray();
+
+        foreach($profesores as $p){
+            $auxProfesores[]=$p->nombre;
+        }
+
+        foreach($alumnos as $a){
+            $auxAlumnos[]=$a->nombre;
+        }
+
+        foreach($conserjes as $c){
+            $auxConserjes[]=$c->nombre;
+        }
+
+
+        $resultado=array_intersect($auxProfesores,$auxAlumnos,$auxConserjes);
+
+        return $resultado;
+
     }
 }

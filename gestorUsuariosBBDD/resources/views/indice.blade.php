@@ -74,7 +74,6 @@ $conserjes=Conexion::verConserjes();
         <form action="gestion" method="post">
             {{ csrf_field() }}
             <input type="submit" value="Gestionar Personas" name="GestionarPersonas">
-            <input type="submit" value="Gestionar Roles" name="GestionarRoles">
         </form><br>
 
         <form action="generar" method="post">
@@ -87,7 +86,7 @@ $conserjes=Conexion::verConserjes();
             <textarea name="descripcion" cols="40" rows="5"><?php if (isset($solucion)) {
     echo $solucion;
 } else {
-    echo 'hola';
+    echo '';
 } ?></textarea>
         </form>
     </center>
