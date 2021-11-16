@@ -19,3 +19,7 @@ Route::post('gestion', [miControlador::class, 'aniadirPersona']);
 Route::post('crear', [miControlador::class, 'ADD']);
 Route::post('generar', [miControlador::class, 'Generando']);
 Route::post('gestionPersonas', [miControlador::class, 'Crear']);
+Route::post('Profesor', [miControlador::class, 'GestionarProfesores']);
+Route::post('Alumno', [miControlador::class, 'GestionarAlumnos']);
+Route::post('Conserje', [miControlador::class, 'GestionarConserjes']);
+Route::post('editar', [miControlador::class, 'EditarUsuarios']);
