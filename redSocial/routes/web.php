@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\miControlador;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +14,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [miControlador::class, 'irIndice']);
+Route::post('loggear', [miControlador::class, 'Login']);
+Route::post('registrando', [miControlador::class, 'Registro']);
