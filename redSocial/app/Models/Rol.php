@@ -9,7 +9,8 @@ class Rol extends Model
 {
     use HasFactory;
 
+    protected $table = 'rol';
     public function conjunto(){
-        return $this->belongsToMany('App\Models\Conjunto','id','id_rol');
+        return $this->hasMany('App\Models\Conjunto','id','id_rol');
     }
 }

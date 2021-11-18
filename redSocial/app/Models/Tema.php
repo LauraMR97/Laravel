@@ -10,7 +10,12 @@ class Tema extends Model
     use HasFactory;
 
     public function comentarios(){
-        return $this->belongsToMany('App\Models\Comentario','id','id_tema');
+        return $this->hasMany('App\Models\Comentario','id','id_tema');
     }
+
+    public function usuario(){
+        return $this->belongsTo('App\Models\Persona','correo','correo');
+    }
+
 }
 

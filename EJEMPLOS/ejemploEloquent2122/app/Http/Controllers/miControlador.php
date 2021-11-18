@@ -44,6 +44,7 @@ class miControlador extends Controller
 
     //------------------------------------------------------------------------
     public function insertarPersonas(Request $req) {
+        dd('Persona::all()');
         $dn = $req->get('DNI');
         $no = $req->get('Nombre');
         $tf = $req->get('Tfno');
@@ -110,7 +111,7 @@ class miControlador extends Controller
     public function probarMany() {
 //        //Opción A.
 //        $coches = Propiedad::with('usuarios')->get();
-////        dd($coches);  
+////        dd($coches);
 //        $conalquiler = [];
 //        foreach ($coches as $co) {
 //            foreach ($co->usuarios as $usu) {
@@ -138,7 +139,7 @@ class miControlador extends Controller
 //        dd($conalquiler);
         //Opción C.
         $coches = Propiedad::with(['usuarios', 'coches'])->get();  //Le pasamos las llamadas a los métodos de los modelos (usuarios y coches).
-//        dd($coches);  
+//        dd($coches);
         $conalquiler = [];
         foreach ($coches as $co) {
 //            dd($co->usuarios[0]->Nombre);
@@ -151,7 +152,7 @@ class miControlador extends Controller
             ];
         }
 
-        
+
         $datos = [
             'pers' => $conalquiler
         ];
@@ -180,7 +181,7 @@ class miControlador extends Controller
 //        }
         //Opción B.
         $coches = Propiedad::with(['usuarios'])->where('DNI', $dni)->get();
-        
+
         $conalquiler = [];
         foreach ($coches as $co) {
             //dd($co->usuarios[0]->Nombre);

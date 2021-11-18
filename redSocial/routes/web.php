@@ -17,3 +17,4 @@ use App\Http\Controllers\miControlador;
 Route::get('/', [miControlador::class, 'irIndice']);
 Route::post('loggear', [miControlador::class, 'Login']);
 Route::post('registrando', [miControlador::class, 'Registro']);
+Route::post('generarPersonas', [miControlador::class, 'generarPersonas']);
