@@ -9,6 +9,11 @@ class Tema extends Model
 {
     use HasFactory;
 
+    protected $table = 'temas';
+    public $timestamps = false;
+
+
+
     public function comentarios(){
         return $this->hasMany('App\Models\Comentario','id','id_tema');
     }

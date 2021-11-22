@@ -9,6 +9,10 @@ class Comentario extends Model
 {
     use HasFactory;
 
+
+    protected $table = 'comentarios';
+    public $timestamps = false;
+
     public function usuarios(){
         return $this->belongsTo('App\Models\Persona','correo','correo');
     }

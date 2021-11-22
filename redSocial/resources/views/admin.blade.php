@@ -10,6 +10,7 @@
     <center>
 <h1>Generador de Personitas</h1>
 <form action="generarPersonas" method="post">
+    {{ csrf_field() }}
     <input type="submit" name="generar" value="Generar 10 personas">
     <input type="submit" name="volver" value="Volver">
 </form>

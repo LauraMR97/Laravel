@@ -15,9 +15,9 @@
         <form action="loggear" method="post">
             {{ csrf_field() }}
             <label>Correo:</label><br>
-            <input type="text" name="correo" value="" placeholder="Correo"><br>
+            <input type="email" name="correo" value="" placeholder="Correo"><br>
             <label>Contraseña:</label><br>
-            <input type="text" name="password" value="" placeholder="Contraseña"><br><br>
+            <input type="password" name="password" value="" placeholder="Contraseña"><br><br>
             <input type="submit" value="Aceptar" name="aceptar">
             <input type="submit" value="Registrate" name="registro">
         </form>
