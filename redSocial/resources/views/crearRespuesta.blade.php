@@ -12,6 +12,8 @@
 
     <form action="crearRespuesta" method="post">
         {{ csrf_field() }}
+        <label>Id_Comentario:</label>
+        <input type="text" name="idComentarioResp" value="<?php echo $idOculta ?>" readonly><br>
         <textarea name="resp" rows="5" cols="50" placeholder="Escriba la respuesta"></textarea><br>
         <input type="submit" name="addRespuesta" value="Añadir Respuesta">
         <input type="submit" name="volver" value="volver">

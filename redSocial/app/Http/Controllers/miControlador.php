@@ -76,6 +76,11 @@ class miControlador extends Controller
             return view('admin');
         }
 
+        if ($val->get('Usuario')) {
+            $temas = Tema::all();
+            return view('temas', ['temas' => $temas]);
+        }
+
         if ($val->get('volver')) {
             return view('indice');
         }
@@ -176,8 +181,9 @@ class miControlador extends Controller
                 return view('temas', ['temas' => $temas]);
             } else {
                 session()->put('temaVisualizado', $tema);
-                $comentarios = Comentario::where('id_tema', $idTema)->get();
-                return view('temaAbierto', ['tema' => $tema, 'comentarios' => $comentarios]);
+                $respuestas = Comentario::where('id_tema', $idTema)->whereNotIn('id_r',[0])->get();
+                $comentarios = Comentario::where('id_tema', $idTema)->where('id_r',0)->get();
+                return view('temaAbierto', ['tema' => $tema, 'comentarios' => $comentarios,'respuestas'=>$respuestas]);
             }
         }
 
@@ -224,14 +230,16 @@ class miControlador extends Controller
                 dd($e);
             }
 
-            $comentarios = Comentario::where('id_tema', $idTema)->get();
-            return view('temaAbierto', ['tema' => $tema, 'comentarios' => $comentarios]);
+            $respuestas = Comentario::where('id_tema', $idTema)->whereNotIn('id_r',[0])->get();
+            $comentarios = Comentario::where('id_tema', $idTema)->where('id_r',0)->get();
+            return view('temaAbierto', ['tema' => $tema, 'comentarios' => $comentarios, 'respuestas'=>$respuestas]);
         }
     }
 
     public function ventanaRespuesta(Request $val)
     {
-        return view('crearRespuesta');
+        $idOculta=$val->get('idOculta');
+        return view('crearRespuesta',['idOculta'=>$idOculta]);
     }
 
     public function addRespuesta(Request $val)
@@ -240,11 +248,35 @@ class miControlador extends Controller
             $tema = session()->get('temaVisualizado');
             $idTema = $tema->id;
 
-            $comentarios = Comentario::where('id_tema', $idTema)->get();
+            $comentarios = Comentario::where('id_tema', $idTema)->where('id_r',0)->get();
             return view('temaAbierto', ['tema' => $tema, 'comentarios' => $comentarios]);
         }
 
         if ($val->get('addRespuesta')) {
+            $respuesta=$val->get('resp');
+            $persona = session()->get('persona');
+            $emailPersona = $persona->correo;
+            $tema = session()->get('temaVisualizado');
+            $idTema = $tema->id;
+            $idTemaResp=$val->get('idComentarioResp');
+
+             //añadiendo nueva respuesta
+             $nuevoComent = new Comentario;
+             $nuevoComent->descripcion = $respuesta;
+             $nuevoComent->correo = $emailPersona;
+             $nuevoComent->id_r = $idTemaResp;
+             $nuevoComent->id_tema = $idTema;
+
+             try {
+                 $nuevoComent->save();
+             } catch (\Exception $e) {
+                 $mensaje = $e->getMessage();
+                 dd($e);
+             }
+
+             $respuestas = Comentario::where('id_tema', $idTema)->whereNotIn('id_r',[0])->get();
+            $comentarios = Comentario::where('id_tema', $idTema)->where('id_r',0)->get();
+            return view('temaAbierto', ['tema' => $tema, 'comentarios' => $comentarios,'respuestas'=>$respuestas]);
         }
     }
 }

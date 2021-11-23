@@ -12,6 +12,12 @@
     <center>
         <h1>Temas:</h1>
         <?php
+        use App\Models\Conjunto;
+        $personaLoggeada=session()->get('persona');
+        $emailPerLoggeada=$personaLoggeada->correo;
+        $ID_ROL = Conjunto::with(['usuarios'])->where('correo', $emailPerLoggeada)->get();
+        dd($ID_ROL);
+
  foreach($temas as $tema){
  ?>
         <form action="temas" method="post">
