@@ -248,8 +248,10 @@ class miControlador extends Controller
             $tema = session()->get('temaVisualizado');
             $idTema = $tema->id;
 
+
+            $respuestas = Comentario::where('id_tema', $idTema)->whereNotIn('id_r',[0])->get();
             $comentarios = Comentario::where('id_tema', $idTema)->where('id_r',0)->get();
-            return view('temaAbierto', ['tema' => $tema, 'comentarios' => $comentarios]);
+            return view('temaAbierto', ['tema' => $tema, 'comentarios' => $comentarios,'respuestas'=>$respuestas]);
         }
 
         if ($val->get('addRespuesta')) {

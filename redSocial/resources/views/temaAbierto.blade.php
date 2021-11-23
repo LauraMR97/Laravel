@@ -9,9 +9,10 @@
 </head>
 
 <body>
-
+        <center>
         <h1><?php echo $tema->titulo; ?></h1>
         <h3>Comentarios:</h3>
+        </center>
         <?php
         if (isset($comentarios)){
         foreach($comentarios as $comentario){
@@ -19,11 +20,11 @@
         <form action="comentarios" method="post">
             {{ csrf_field() }}
             <pre>
-                              <input type="hidden" name="idOculta" value="<?php echo $comentario->id; ?>" readonly><br>
-                              <label>Comentario de:</label>
-                              <input type="text" value="<?php echo $comentario->correo; ?>" readonly><br>
-                              <textarea name="comentario" rows="3" cols="50" readonly><?php echo $comentario->descripcion; ?></textarea><br>
-                              <input type="submit" value="Contestar" name="respuesta">
+                                  <input type="hidden" name="idOculta" value="<?php echo $comentario->id; ?>" readonly><br>
+                                  <label>Comentario de:</label>
+                                  <input type="text" value="<?php echo $comentario->correo; ?>" readonly><br>
+                                  <textarea name="comentario" rows="3" cols="50" readonly><?php echo $comentario->descripcion; ?></textarea><br>
+                                  <input type="submit" value="Contestar" name="respuesta">
               </pre>
             <center>
             <?php

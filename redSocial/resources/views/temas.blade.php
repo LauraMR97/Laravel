@@ -15,24 +15,39 @@
         use App\Models\Conjunto;
         $personaLoggeada=session()->get('persona');
         $emailPerLoggeada=$personaLoggeada->correo;
-        $ID_ROL = Conjunto::with(['usuarios'])->where('correo', $emailPerLoggeada)->get();
-        dd($ID_ROL);
+        $ID_rol_Collection = Conjunto::with(['usuarios'])->where('correo', $emailPerLoggeada)->get();
+        $rol=$ID_rol_Collection[0]->id_rol;
+
+
 
  foreach($temas as $tema){
+     if($rol==1){
  ?>
         <form action="temas" method="post">
             {{ csrf_field() }}
             <label>Titulo:</label>
-            <input type="text" name="titulo" value="<?php echo $tema->titulo?>" readonly>
+            <input type="text" name="titulo" value="<?php echo $tema->titulo; ?>" readonly>
             <label>Edad Permitida:</label>
-            <input type="text" name="edad_Minima" value="<?php echo $tema->edad_minima.' años'?>" readonly>
+            <input type="text" name="edad_Minima" value="<?php echo $tema->edad_minima . ' años'; ?>" readonly>
             <input type="submit" name="borrar" value="X">
             <input type="submit" name="ver" value="Ver Tema">
         </form><br>
         <?php
  }
+ else{
+     ?>
+        <form action="temas" method="post">
+            {{ csrf_field() }}
+            <label>Titulo:</label>
+            <input type="text" name="titulo" value="<?php echo $tema->titulo; ?>" readonly>
+            <label>Edad Permitida:</label>
+            <input type="text" name="edad_Minima" value="<?php echo $tema->edad_minima . ' años'; ?>" readonly>
+            <input type="submit" name="ver" value="Ver Tema">
+        </form><br>
+        <?php
+ }
+}
 ?>
-
         <form action="gestionarTemas" method="post">
             {{ csrf_field() }}
             <input type="submit" name="add" value="Añadir Tema">
