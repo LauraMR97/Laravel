@@ -128,8 +128,17 @@ class miControlador extends Controller
         }
 
         if ($val->get('volver')) {
+            session()->forget('persona');
             return view('indice');
         }
+    }
+
+//Para probar el Middleware
+    public function irCrearTemas()
+    {
+
+     return view('addTema');
+
     }
 
     public function aniadirTemaNuevo(Request $val)
