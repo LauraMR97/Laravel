@@ -23,12 +23,16 @@ Route::post('registrando', [miControlador::class, 'Registro']);
 /*Todo lo que haya aqui dentro, pasara por el middleware mio. Un mecanismo de seguridad
 para averiguar si la persona se ha loggeado o no.*/
 Route::group(['middleware' => 'mio'], function () {
-    Route::post('generarPersonas', [miControlador::class, 'generarPersonas']);
-    Route::post('gestionarTemas', [miControlador::class, 'gestionarTemas']);
-    Route::post('addTema', [miControlador::class, 'aniadirTemaNuevo']);
-    Route::post('temas', [miControlador::class, 'verYBorrarTemas']);
-    Route::post('volverDeTema', [miControlador::class, 'volverDeTemaAbierto']);
-    Route::post('comentarios', [miControlador::class, 'ventanaRespuesta']);
-    Route::post('crearRespuesta', [miControlador::class, 'addRespuesta']);
+    Route::any('gestionarTemas', [miControlador::class, 'gestionarTemas']);
+    Route::any('addTema', [miControlador::class, 'aniadirTemaNuevo']);
+    Route::any('temas', [miControlador::class, 'verYBorrarTemas']);
+    Route::any('volverDeTema', [miControlador::class, 'volverDeTemaAbierto']);
+    Route::any('comentarios', [miControlador::class, 'ventanaRespuesta']);
+    Route::any('crearRespuesta', [miControlador::class, 'addRespuesta']);
     Route::get('/addTema',[miControlador::class, 'irCrearTemas']);
+});
+
+
+Route::group(['middleware' => ['mio','midAdmin']], function () {
+    Route::any('generarPersonas', [miControlador::class, 'generarPersonas']);
 });

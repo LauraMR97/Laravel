@@ -34,6 +34,7 @@ class miControlador extends Controller
 
             if ($pers != null) {
                 $rol = Conjunto::where('correo', $c)->first();
+                session()->put('rol', $rol);
                 if ($rol->id_rol == 1) {
                     return view('admin');
                 } else {
@@ -82,6 +83,8 @@ class miControlador extends Controller
         }
 
         if ($val->get('volver')) {
+            session()->forget('personas');
+            session()->forget('rol');
             return view('indice');
         }
     }
@@ -129,6 +132,7 @@ class miControlador extends Controller
 
         if ($val->get('volver')) {
             session()->forget('persona');
+            session()->forget('rol');
             return view('indice');
         }
     }
