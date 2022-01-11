@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/var/www/html/EjemplosLaravel/ejemploAuth/routes/web.php</file>
+            <file>file:/var/www/html/EjemplosLaravel/ejemploAuth/app/Models/User.php</file>
+            <file>file:/var/www/html/EjemplosLaravel/ejemploAuth/database/migrations/2014_10_12_000000_create_users_table.php</file>
+            <file>file:/var/www/html/EjemplosLaravel/ejemploAuth/resources/views/home.blade.php</file>
+            <file>file:/var/www/html/EjemplosLaravel/ejemploAuth/app/Http/Controllers/miControlador.php</file>
+            <file>file:/var/www/html/EjemplosLaravel/ejemploAuth/app/Http/Controllers/Auth/RegisterController.php</file>
+            <file>file:/var/www/html/EjemplosLaravel/ejemploAuth/app/Http/Controllers/HomeController.php</file>
+            <file>file:/var/www/html/EjemplosLaravel/ejemploAuth/database/seeders/RoleTableSeeder.php</file>
+            <file>file:/var/www/html/EjemplosLaravel/ejemploAuth/database/migrations/2021_01_08_095604_create_roles_table.php</file>
+            <file>file:/var/www/html/EjemplosLaravel/ejemploAuth/database/migrations/2021_01_08_100050_create_role_user_table.php</file>
+            <file>file:/var/www/html/EjemplosLaravel/ejemploAuth/app/Models/Role.php</file>
+        </group>
+    </open-files>
+</project-private>

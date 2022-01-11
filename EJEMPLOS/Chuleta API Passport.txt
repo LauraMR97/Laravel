@@ -1,0 +1,195 @@
+php artisan make:model Persona -m  --> Esto crea la migration.
+------------------------------- Migration y modelo. ----------------------------------------
+$table->string('nombre', 50);
+$table->string('ciudad', 100);
+
+protected $fillable = [
+        'nombre',
+        'ciudad',
+    ];
+    
+php artisan make:seeder PersonaSeeder
+---------------------------------- Seeder. -------------------------------------------------
+use App\Models\Persona;
+Persona::truncate();
+        $faker = \Faker\Factory::create();
+        // And now, let's create a few articles in our database:
+        for ($i = 0; $i < 20; $i++) {
+            Persona::create([
+                'nombre' => $faker->name,
+                'ciudad' => $faker->city,
+            ]);
+        }
+php artisan db:seed --class=PersonaSeeder
+        
+php artisan make:controller API/PersonaController --api --> Con esta opción crea los métodos habituales.
+---------------------------- Controlador del modelo. ---------------------------------------
+    public function index()
+    {
+        $personas = Persona::all();
+        return response()->json(['code' => 200, 'message' => $personas], 200);
+    }
+
+
+    public function show($id)
+    {
+         // Comprobamos si el artículo existe.
+        $persona = Persona::find($id);
+
+        // Si no existe ese artículo devolvemos un error.
+        if (!$persona) {
+            // Se devuelve un array errors con los errores encontrados y cabecera HTTP 404.
+            // En code podríamos indicar un código de error personalizado de nuestra aplicación si lo deseamos.
+            return response()->json(['code' => 404, 'message' => 'No se encuentra un artículo con ese código ' . $id], 404);
+        }
+
+        //return $persona;
+        return response()->json(['code' => 200, 'message' => $persona], 200);
+    }
+    
+    
+php artisan make:controller API/AuthController    
+------------------------------------------ AuthController.--------------------------------------------------
+ public function register(Request $request) {
+        //return response()->json([$request->all()]);
+//        $validatedData = $request->validate([
+//            'name' => 'required|max:55',
+//            'email' => 'email|required|unique:users',
+//            'password' => 'required|confirmed'
+//        ]);
+
+        if (User::where('email', $request->get('email'))->count() == 1) {
+            return response()->json(['message' => 'Registro incorrecto. Revise las credenciales.', 'code' => 400], 400);
+        }
+        
+        $validatedData = [
+            'name' => $request->get('name'),
+            'email' => $request->get('email'),
+            'password' => $request->get('password'),
+        ];
+
+        $validatedData['password'] = Hash::make($request->password);
+
+        $user = User::create($validatedData);
+
+        $accessToken = $user->createToken('authToken')->accessToken;
+
+        //return response(['user' => $user, 'access_token' => $accessToken], 201);
+        return response()->json(['message' => ['user' => $user, 'access_token' => $accessToken], 'code' => 201], 201);
+    }
+
+    public function login(Request $request) {
+        $loginData = $request->validate([
+            'email' => 'email|required',
+            'password' => 'required'
+        ]);
+
+        if (!auth()->attempt($loginData)) {
+            //return response(['message' => 'Login incorrecto. Revise las credenciales.'], 400);
+            return response()->json(['message' => 'Login incorrecto. Revise las credenciales.', 'code' => 400], 400);
+        }
+
+        $accessToken = auth()->user()->createToken('authToken')->accessToken;
+
+        //return response(['user' => auth()->user(), 'access_token' => $accessToken]);
+        return response()->json(['message' => ['user' => auth()->user(), 'access_token' => $accessToken], 'code' => 200], 200);
+    }
+    
+
+
+----------------------------------------- Rutas de la api.---------------------------------------------------
+Route::post('register', [AuthController::class, 'register']);
+Route::post('login', [AuthController::class, 'login']);
+
+Route::group(['middleware' => 'auth:api'], function() {
+    Route::get('personas', [PersonaController::class, 'index']);
+    Route::get('personas/{id}', [PersonaController::class, 'show']);
+});
+
+
+Para probar:
+https://www.positronx.io/laravel-rest-api-with-passport-authentication-tutorial/
+Primero registrar: los tres parámetros: name, email y password.
+Luego hacemos el login: en los parámetros: email y password.  Y en header Authorization application/json.
+
+En raw:
+{
+    "token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiMmRhZWY2MjVjODg2M2ZkOTQ5YWI5YzU2MmFmYWE2ZjA1NDQxODk4NzVhODcwZDdlN2QyMjBmMjY0ZmUwYTNhMmNmMTUyYTY5NDQ3MjE5OTEiLCJpYXQiOjE2NDEyMjg0NjIuNjIyODc3LCJuYmYiOjE2NDEyMjg0NjIuNjIyODk0LCJleHAiOjE2NzI3NjQ0NjIuNTE4OTgzLCJzdWIiOiIyIiwic2NvcGVzIjpbXX0.HNdUoowevPud8XBWyz2EO1xFfraBRiqrmjbcZo2q-DBjw1nS7L3RO_Fk_k9IX0MpkfjoMEgfEhI8NKFABuSW_hgYFllbxDe9d3suo3d2AaOAXDcoZJ8a2D6WZbSF8d-19lzHVqebj-lR-VZSwYx9n80_CgxuTXjDhbUEq-ZCmG_JhuSfhp1TqZhbG4swAp33sA4oqAfC91z_x9vqK9bXP3QbQ4DUZXnNrqxYmP_dYzfGa2FzSD5fkD_MCQKy83fqnFWz4VQsFXF9WhHUqHc0N38frymL-mfs6uk89mtht1IkoF_8B6S6HElq14XZ99YSBDWuQ9i7CfTysyTdD04uJD97Qsr4LoPbv7Hg9SVibcSr_eF73gGuVyC1ASyGP3h8ZMtR6fevFqQchKSrvfI49DQrVGcJz2-24Ze4BawdW6423O-4ScMLUPUOVfRVJvXBjqrS3OgiRICZGJs4NO5Ip9HfP_wwefyRTY3m0B7WlyYDTGxk47E2Kc9NeDqOdSyryGWKU036OWrXNT-GYzXR76W0hJl6q7uBnWvQstIOk_KU1bvtIeMLw0yfPI5oSt1W1jcF8Rrbj4AdyVdH_a_QiqFbt6sQ7I1K4wcY0ICGdvg0w06CCwF83xJ9afIDSgX3t28uXSNjsIEhEwBgG-x4Cac4cv7gE5BaIemt_75uDpI"
+}
+Después, con el token, ya podemos hacer las consultas. En Authorization ponemos el bearer token (sin las comillas) y la ruta de la API.
+
+
+Para probar con PHP.
+---------------------------------- index del PHP que hace login y consume.--------------------------------------------
+<?php
+        $data = [
+            'email' => 'faranzabe@gmail.com',
+            'password' => 12345678
+        ];
+        $ch = curl_init("http://localhost:8000/api/login");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+        $response = curl_exec($ch);
+        //var_dump($response);
+        curl_close($ch);
+        $respuesta = json_decode($response, true);
+        //var_dump($respuesta['code']);
+        if ($respuesta['code'] == 400) {
+            echo $respuesta['message'];
+        } else {
+            echo 'Login realizado'.'<br>';
+            //echo $respuesta['message']['access_token'];
+    
+            // use above token to make further api calls in this session or until the access token expires
+            //Haciendo una petición GET: para obtener un artículo concreto.
+            $ch = curl_init("http://localhost:8000/api/naves/9");
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+            $header = array(
+                'Authorization: Bearer ' . $respuesta['message']['access_token']
+            );
+//            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+//                'Content-Type: application/json',
+//                'Authorization: Bearer ' . $token
+//            ));
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+            $result = curl_exec($ch);
+            curl_close($ch);
+            
+            $respuesta = json_decode($result, true);
+//            var_dump($respuesta);
+            if ($respuesta['code'] == 404) {
+                echo $respuesta['message'];
+            } else {
+                echo $respuesta['message'];
+                echo 'ID: ' . $respuesta['message']['id'] . '<br>';
+                echo 'Nombre: ' . $respuesta['message']['nombre'] . '<br>';
+                echo 'Ciudad: ' . $respuesta['message']['ciudad'] . '<br>';
+            }
+           
+        }
+        ?>
+        
+        
+        //---------------- Realizar un registro a través de la API -------------------
+//        $data = [
+//            'name' => 'Otro',
+//            'email' => 'otro@gmail.com',
+//            'password' => 12345678
+//        ];
+//        $ch = curl_init("http://localhost:8000/api/register");
+//        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+//        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+//        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+//        $response = curl_exec($ch);
+//        var_dump($response);
+//        curl_close($ch);
+//        $respuesta = json_decode($response, true);
+//        var_dump($respuesta['code']);
+//        if ($respuesta['code'] == 400) {
+//            echo $respuesta['message'];
+//        } else {
+//            echo 'Registro realizado'.'<br>';
+//            echo $respuesta['message']['access_token'];
+
